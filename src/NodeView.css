@@ -1,0 +1,11 @@
+.NodeView{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.NodeView>div{
+    max-width:150px;
+    min-width:50px;
+    margin: 5px;
+}

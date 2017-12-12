@@ -1,33 +1,77 @@
 import React, { Component } from 'react';
+import { Label } from 'react-bootstrap';
+import Temperature from './Temperature';
+import Light from './Light';
+import Pressure from './Pressure';
+import Humidity from './Humidity';
 
-import { Panel } from 'react-bootstrap';
-
-
-function time_to_text(timestamp){
-    var t = new Date(timestamp * 1000);//as per javascript time in ms and c++ time_t in sec
-    return t.toLocaleTimeString() + " , " + t.toLocaleDateString();
-}
+import time_to_text from './utils'
 
 function SensorsMap(props){
     const listitems = Object.keys(props.sensors).map((sensor) =>
-        <li key={sensor}>
-            {sensor} : {props.sensors[sensor].Values[0].toFixed(2)}  ({time_to_text(props.sensors[sensor].Times[0])})
-        </li>
-        );
+        {
+            if(sensor === "temperature")
+            {
+                return (
+                    <Temperature    key={props.nodeName+sensor}
+                                    nodeName = {props.nodeName}
+                                    value={props.sensors[sensor].Values[0]}
+                                    time={props.sensors[sensor].Times[0]}
+                    />
+                );
+            }
+            else if(sensor === "light")
+            {
+                return (
+                    <Light  key={props.nodeName+sensor}
+                            nodeName = {props.nodeName}
+                            value={props.sensors[sensor].Values[0]}
+                            time={props.sensors[sensor].Times[0]}
+                    />
+                );
+            } if(sensor === "pressure")
+            {
+                return (
+                    <Pressure   key={props.nodeName+sensor}
+                                nodeName = {props.nodeName}
+                                value={props.sensors[sensor].Values[0]}
+                                time={props.sensors[sensor].Times[0]}
+                    />
+                );
+            } if(sensor === "humidity")
+            {
+                return (
+                    <Humidity   key={props.nodeName+sensor}
+                                nodeName = {props.nodeName}
+                                value={props.sensors[sensor].Values[0]}
+                                time={props.sensors[sensor].Times[0]}
+                    />
+                );
+            } else
+            {
+                return (
+                    <div key={props.nodeName+sensor}>
+                        {sensor} : {props.sensors[sensor].Values[0].toFixed(2)}  ({time_to_text(props.sensors[sensor].Times[0])})
+                    </div>
+                    
+                );
+            }
+        }
+        
+    );
 
         return(
-            <div>
-                <ul>{listitems}</ul>
-            </div>
+            <div className="NodeView">{listitems}</div>
         );
 }
 
 class NodeView extends Component{
     render(){
         return(
-        <Panel header={this.props.nodeName} bsStyle="primary">
-            <SensorsMap sensors={this.props.sensors} /> 
-        </Panel>
+        <center>
+            <h2><Label>{this.props.nodeName}</Label></h2>
+            <SensorsMap sensors={this.props.sensors} nodeName={this.props.nodeName}/> 
+        </center>
         );
     }
 }
