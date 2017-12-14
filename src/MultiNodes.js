@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import Websocket from 'react-websocket';
 import merge from 'deepmerge';
 import NodeView from './NodeView';
+import {Button} from 'react-bootstrap';
 
 import "./MultiNodes.css"
 
@@ -56,7 +57,7 @@ class MultiNodes extends Component{
     }
     handleData(data) {
         let server_message = JSON.parse(data);
-        //console.log("server_message: ",server_message);
+        console.log("server_message: ",server_message);
         if(server_message.update)
         {
             this.setState( (prevState,props) => (
@@ -66,21 +67,32 @@ class MultiNodes extends Component{
             )
             );
         }
-        else if(server_message.response.nodesinfo)
+        else if((server_message.response) && (server_message.response.nodesinfo) )
         {
             this.setState({nodesinfo:server_message.response.nodesinfo});
         }
     }
+    kill_server(){
+		var jReq = {
+            request : {
+                id 		: Math.floor(Math.random() * 10000),
+                type : "kill"
+            }
+        };
+        var tReq = JSON.stringify(jReq);
+        this.refWebSocket.state.ws.send(tReq);
+    }
     render(){
     return(
         <div>
-            <hr/>
+        <Button onClick={this.requestNodesInfo.bind(this)}>request</Button>
+        <Button onClick={this.kill_server.bind(this)}>kill server</Button>
+        <hr/>
             <NodesMap   updatemap={this.state.updatemap}
                         nodesinfo={this.state.nodesinfo}/>
             <hr/>
-            <Websocket  url='ws://10.0.0.12:4348/measures'
+            <Websocket  url='ws://localhost:8765/measures'
                 onMessage={this.handleData.bind(this)}
-                onOpen={this.requestNodesInfo.bind(this)}
                 debug={true}
                 ref={(websref) => {this.refWebSocket = websref;}  }
             />
