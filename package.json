@@ -5,9 +5,9 @@
   "homepage": "http://10.0.0.12/info/",
   "dependencies": {
     "deepmerge": "^2.2.1",
-    "react": "^16.13.0",
+    "react": "^16.13.1",
     "react-bootstrap": "^0.31.5",
-    "react-dom": "^16.13.0",
+    "react-dom": "^16.13.1",
     "react-scripts": "1.0.17",
     "react-websocket": "^2.1.0"
   },
